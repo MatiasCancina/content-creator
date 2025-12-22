@@ -1,5 +1,4 @@
-import "./globals.css";
-import { ThemeProvider } from "next-themes";
+import { Providers } from "./providers";
 
 export default function RootLayout({
   children,
@@ -9,9 +8,7 @@ export default function RootLayout({
   return (
     <html lang="es" suppressHydrationWarning>
       <body>
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-          {children}
-        </ThemeProvider>
+        <Providers>{children}</Providers>
       </body>
     </html>
   );
