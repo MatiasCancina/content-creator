@@ -8,7 +8,7 @@ export default function HistoryList({ items, onSelect, onDelete }: Props) {
       {items.map((item) => (
         <div
           key={item.id}
-          className="flex items-start justify-between gap-2 border rounded-md p-3 hover:bg-gray-50"
+          className="flex items-start justify-between gap-2 border rounded-md p-3 hover:bg-gray-200 hover:dark:bg-gray-800"
         >
           <button
             onClick={() => onSelect(item.content)}

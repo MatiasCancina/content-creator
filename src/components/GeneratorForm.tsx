@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Card } from "@/components/ui/card";
+import ThemeToggle from "@/components/ThemeToggle";
 import OutputCard from "./OutputCard";
 import HistoryList from "./HistoryList";
 import { HistoryItem, Tone, FormData } from "@/lib/types";
@@ -104,11 +105,18 @@ export default function GeneratorForm() {
 
   return (
     <div className="w-full max-w-xl mx-auto space-y-6">
-      <Card className="p-6 space-y-4">
+      <Card className="p-6 space-y-4 bg-white dark:bg-gray-900 dark:text-gray-100">
+        <div className="flex justify-end">
+          <ThemeToggle />
+        </div>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <div>
             <label>Nombre del producto</label>
-            <Input placeholder="PlayStation 5" {...register("name")} />
+            <Input
+              placeholder="PlayStation 5"
+              {...register("name")}
+              className="bg-white dark:bg-gray-800 dark:text-white"
+            />
             {errors.name && (
               <p className="text-red-500 text-sm">{errors.name.message}</p>
             )}
@@ -119,6 +127,7 @@ export default function GeneratorForm() {
             <Textarea
               placeholder="Consola nueva, incluye control..."
               {...register("description")}
+              className="bg-white dark:bg-gray-800 dark:text-white"
             />
             {errors.description && (
               <p className="text-red-500 text-sm">
