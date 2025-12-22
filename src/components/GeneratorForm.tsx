@@ -5,22 +5,13 @@ import useLocalStorage from "@/lib/useLocalStorage";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { generateSchema } from "@/lib/validators";
-import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Card } from "@/components/ui/card";
 import OutputCard from "./OutputCard";
 import HistoryList from "./HistoryList";
-
-type HistoryItem = {
-  id: string;
-  content: string;
-  tone: string;
-  createdAt: number;
-};
-type Tone = "neutral" | "formal" | "divertido" | "tecnico" | "ventas";
-type FormData = z.infer<typeof generateSchema>;
+import { HistoryItem, Tone, FormData } from "@/lib/types";
 
 export default function GeneratorForm() {
   const [history, setHistory] = useState<HistoryItem[]>([]);

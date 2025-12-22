@@ -1,15 +1,4 @@
-type HistoryItem = {
-  id: string;
-  content: string;
-  tone: string;
-  createdAt: number;
-};
-
-type Props = {
-  items: HistoryItem[];
-  onSelect: (content: string) => void;
-  onDelete: (id: string) => void;
-};
+import { Props } from "@/lib/types";
 
 export default function HistoryList({ items, onSelect, onDelete }: Props) {
   return (
