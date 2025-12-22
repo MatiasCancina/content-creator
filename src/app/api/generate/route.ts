@@ -1,11 +1,11 @@
 import { NextResponse } from "next/server";
 import { groq } from "@/lib/groq";
-import { generateSchema } from "@/lib/validators";
+import { generateApiSchema } from "@/lib/validators";
 
 export async function POST(req: Request) {
     try {
         const body = await req.json();
-        const parsed = generateSchema.safeParse(body);
+        const parsed = generateApiSchema.safeParse(body);
 
         if (!parsed.success) {
             return NextResponse.json(
@@ -14,19 +14,20 @@ export async function POST(req: Request) {
             );
         }
 
-        const { name, description } = parsed.data;
+        const { name, description, tone } = parsed.data;
 
         const prompt = `
-      Genera contenido optimizado para un producto.
-      Producto: ${name}.
-      Descripción: ${description}.
+            Genera contenido para un producto con tono "${tone}".
 
-      Necesito:
-      - Un título atractivo
-      - Una descripción SEO-friendly
-      - 5 bullet points
-      - Categoría sugerida
-    `;
+            Producto: ${name}
+            Descripción: ${description}
+
+            Devuelve:
+            - Título
+            - Descripción
+            - 5 bullet points
+            - Categoría sugerida
+            `;
 
         const completion = await groq.chat.completions.create({
             model: "llama-3.3-70b-versatile",

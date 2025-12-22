@@ -11,10 +11,20 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Card } from "@/components/ui/card";
 import OutputCard from "./OutputCard";
+import HistoryList from "./HistoryList";
 
+type HistoryItem = {
+  id: string;
+  content: string;
+  tone: string;
+  createdAt: number;
+};
+type Tone = "neutral" | "formal" | "divertido" | "tecnico" | "ventas";
 type FormData = z.infer<typeof generateSchema>;
 
 export default function GeneratorForm() {
+  const [history, setHistory] = useState<HistoryItem[]>([]);
+  const [tone, setTone] = useState<Tone>("neutral");
   const [result, setResult] = useLocalStorage<string | null>(
     "lastOutput",
     null
@@ -36,17 +46,44 @@ export default function GeneratorForm() {
     resolver: zodResolver(generateSchema),
   });
 
+  useEffect(() => {
+    try {
+      const stored = localStorage.getItem("outputHistory");
+      if (stored) {
+        setHistory(JSON.parse(stored));
+      }
+    } catch {}
+  }, []);
+
   const onSubmit = async (data: FormData) => {
     setLoading(true);
     const res = await fetch("/api/generate", {
       method: "POST",
-      body: JSON.stringify(data),
+      body: JSON.stringify({
+        ...data,
+        tone,
+      }),
     });
     const json = await res.json();
     setLoading(false);
 
     if (json.result) {
       setResult(json.result);
+
+      // eslint-disable-next-line react-hooks/purity
+      const now = Date.now();
+
+      const newItem: HistoryItem = {
+        id: crypto.randomUUID(),
+        content: json.result,
+        tone,
+        createdAt: now,
+      };
+
+      const updatedHistory = [newItem, ...history].slice(0, 10);
+
+      setHistory(updatedHistory);
+      localStorage.setItem("outputHistory", JSON.stringify(updatedHistory));
     }
   };
 
@@ -75,20 +112,32 @@ export default function GeneratorForm() {
             )}
           </div>
 
+          <div>
+            <label>Tono</label>
+            <select
+              className="w-full border rounded-md p-2"
+              value={tone}
+              onChange={(e) => setTone(e.target.value as Tone)}
+            >
+              <option value="neutral">Neutral</option>
+              <option value="formal">Formal</option>
+              <option value="divertido">Divertido</option>
+              <option value="tecnico">Técnico</option>
+              <option value="ventas">Orientado a ventas</option>
+            </select>
+          </div>
+
           <Button type="submit" disabled={loading}>
-            {loading ? "Generando..." : "Generar contenido"}
+            {loading ? "Generando Contenido..." : "Generar contenido"}
           </Button>
         </form>
       </Card>
 
-      {loading && (
-        <Card className="p-4 text-center animate-pulse text-lg text-gray-500">
-          Generando contenido...
-        </Card>
-      )}
-
       {/* Solo renderiza OutputCard después de hidratación y si hay result */}
-      {hasHydrated && result && <OutputCard text={result} />}
+      {hasHydrated && result && !loading && <OutputCard text={result} />}
+      {history.length > 0 && (
+        <HistoryList items={history} onSelect={setResult} />
+      )}
     </div>
   );
 }
