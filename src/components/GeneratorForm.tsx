@@ -87,6 +87,30 @@ export default function GeneratorForm() {
     }
   };
 
+  const handleDeleteHistoryItem = (id: string) => {
+    if (history.length === 1) {
+      alert("Debe existir al menos un elemento en el historial");
+      return;
+    }
+
+    const confirmed = window.confirm(
+      "¿Estás seguro de que querés eliminar este contenido del historial?"
+    );
+
+    if (!confirmed) return;
+
+    const itemToDelete = history.find((item) => item.id === id);
+
+    const updatedHistory = history.filter((item) => item.id !== id);
+
+    setHistory(updatedHistory);
+    localStorage.setItem("outputHistory", JSON.stringify(updatedHistory));
+
+    if (itemToDelete && result === itemToDelete.content) {
+      setResult(null);
+    }
+  };
+
   return (
     <div className="w-full max-w-xl mx-auto space-y-6">
       <Card className="p-6 space-y-4">
@@ -136,7 +160,11 @@ export default function GeneratorForm() {
       {/* Solo renderiza OutputCard después de hidratación y si hay result */}
       {hasHydrated && result && !loading && <OutputCard text={result} />}
       {history.length > 0 && (
-        <HistoryList items={history} onSelect={setResult} />
+        <HistoryList
+          items={history}
+          onSelect={setResult}
+          onDelete={handleDeleteHistoryItem}
+        />
       )}
     </div>
   );
