@@ -23,10 +23,10 @@ export default function OutputCard({ text }: { text: string }) {
         shadow-xl shadow-primary/5 dark:shadow-primary/10
         transition-all duration-500 ease-out
         hover:shadow-2xl hover:shadow-primary/10 dark:hover:shadow-primary/20
-        animate-in fade-in-0 slide-in-from-bottom-4 duration-500"
+        animate-in fade-in-0 slide-in-from-bottom-4"
     >
       {/* Gradient accent line */}
-      <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-primary via-accent to-primary" />
+      <div className="absolute top-0 left-0 right-0 h-1 bg-linear-to-r from-primary via-accent to-primary" />
       
       {/* Subtle background pattern */}
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(var(--primary),0.03),transparent_50%)] dark:bg-[radial-gradient(circle_at_50%_0%,rgba(var(--primary),0.08),transparent_50%)]" />
