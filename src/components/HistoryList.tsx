@@ -1,9 +1,16 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import type { Props } from "@/lib/types";
 import { Card } from "@/components/ui/card";
-import { Clock, Trash2, ChevronRight, AlertTriangle, X } from "lucide-react";
+import {
+  Clock,
+  Trash2,
+  ChevronRight,
+  AlertTriangle,
+  X,
+  Check,
+} from "lucide-react";
 import { useLanguage } from "@/lib/LanguageContext";
 
 import type { TranslationKey } from "@/lib/translations";
@@ -34,8 +41,18 @@ const toneLabels: Record<string, { labelKey: TranslationKey; color: string }> =
 export default function HistoryList({ items, onSelect, onDelete }: Props) {
   const { t, locale } = useLanguage();
   const [deletingId, setDeletingId] = useState<string | null>(null);
+  const [showSuccess, setShowSuccess] = useState(false);
 
   const canDelete = items.length > 1;
+
+  useEffect(() => {
+    if (showSuccess) {
+      const timer = setTimeout(() => {
+        setShowSuccess(false);
+      }, 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [showSuccess]);
 
   return (
     <>
@@ -170,17 +187,11 @@ export default function HistoryList({ items, onSelect, onDelete }: Props) {
                 </div>
 
                 <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2">
-                  {t("copy") === "Copiar"
-                    ? "¿Eliminar elemento?"
-                    : "Delete item?"}
+                  {t("deleteTitle")}
                 </h3>
 
                 <p className="text-sm text-gray-600 dark:text-gray-400 max-w-xs">
-                  {!canDelete
-                    ? t("deleteMinimum")
-                    : t("copy") === "Copiar"
-                      ? "Esta acción no se puede deshacer. El elemento será eliminado permanentemente."
-                      : "This action cannot be undone. The item will be permanently deleted."}
+                  {t("deleteDescription")}
                 </p>
               </div>
             </div>
@@ -196,13 +207,14 @@ export default function HistoryList({ items, onSelect, onDelete }: Props) {
                 transition-colors duration-200
                 focus:outline-none focus-visible:ring-2 focus-visible:ring-gray-400"
               >
-                {t("copy") === "Copiar" ? "Cancelar" : "Cancel"}
+                {t("cancel")}
               </button>
 
               <button
                 onClick={() => {
                   if (!canDelete) return;
                   onDelete(deletingId as string);
+                  setShowSuccess(true);
                   setDeletingId(null);
                 }}
                 disabled={!canDelete}
@@ -216,9 +228,31 @@ export default function HistoryList({ items, onSelect, onDelete }: Props) {
                 focus:outline-none focus-visible:ring-2 focus-visible:ring-red-500
                 shadow-sm hover:shadow-md"
               >
-                {t("copy") === "Copiar" ? "Eliminar" : "Delete"}
+                {t("delete")}
               </button>
             </div>
+          </div>
+        </div>
+      )}
+
+      {showSuccess && (
+        <div
+          className="fixed bottom-6 left-1/2 z-50 -translate-x-1/2
+          animate-in fade-in-0 slide-in-from-bottom-4 fade-out-0 slide-out-to-bottom-4 duration-300"
+        >
+          <div
+            className="flex items-center gap-3 px-4 py-3 rounded-xl
+            bg-white dark:bg-gray-900
+            border border-gray-200 dark:border-gray-800
+            shadow-lg shadow-black/10 dark:shadow-black/40
+            backdrop-blur-sm"
+          >
+            <div className="shrink-0 w-5 h-5 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center">
+              <Check className="h-3.5 w-3.5 text-green-600 dark:text-green-400" />
+            </div>
+            <p className="text-sm font-medium text-gray-900 dark:text-gray-100">
+              {t("deleteSuccess")}
+            </p>
           </div>
         </div>
       )}

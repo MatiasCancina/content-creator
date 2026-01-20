@@ -26,6 +26,8 @@ export const translations = {
         generating: "Generando contenido...",
         copy: "Copiar",
         copied: "Copiado",
+        cancel: "Cancelar",
+        delete: "Eliminar",
 
         // Output
         generatedContent: "Contenido Generado",
@@ -36,6 +38,9 @@ export const translations = {
         elements: "elementos",
         deleteConfirm: "Estas seguro de que queres eliminar este contenido del historial?",
         deleteMinimum: "Debe existir al menos un elemento en el historial",
+        deleteSuccess: "Elemento eliminado exitosamente",
+        deleteTitle: "¿Eliminar elemento?",
+        deleteDescription: "Esta acción no se puede deshacer. El elemento será eliminado permanentemente.",
 
         // Validation
         nameRequired: "El nombre es requerido",
@@ -66,6 +71,8 @@ export const translations = {
         generating: "Generating content...",
         copy: "Copy",
         copied: "Copied",
+        cancel: "Cancel",
+        delete: "Delete",
 
         // Output
         generatedContent: "Generated Content",
@@ -76,6 +83,9 @@ export const translations = {
         elements: "items",
         deleteConfirm: "Are you sure you want to delete this content from history?",
         deleteMinimum: "There must be at least one item in the history",
+        deleteSuccess: "Item deleted successfully",
+        deleteTitle: "Delete item?",
+        deleteDescription: "This action cannot be undone. The item will be permanently deleted.",
 
         // Validation
         nameRequired: "Name is required",

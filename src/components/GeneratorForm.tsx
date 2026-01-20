@@ -157,9 +157,13 @@ export default function GeneratorForm() {
                   </p>
                 </div>
               </div>
-              <div className="flex items-center gap-2">
-                <LanguageSelector />
-                <ThemeToggle />
+              <div className="flex flex-col sm:flex-row items-end sm:items-center gap-3">
+                <div className="w-full sm:w-auto flex justify-end">
+                  <LanguageSelector />
+                </div>
+                <div className="w-full sm:w-auto flex justify-end">
+                  <ThemeToggle />
+                </div>
               </div>
             </div>
           </div>
@@ -231,28 +235,42 @@ export default function GeneratorForm() {
                 {t("contentTone")}
               </Label>
               <div className="grid grid-cols-2 sm:grid-cols-5 gap-2">
-                {toneOptions.map((option) => (
-                  <button
-                    key={option.value}
-                    type="button"
-                    onClick={() => setTone(option.value)}
-                    className={`group relative p-3 rounded-xl text-sm font-medium
-                      border transition-all duration-300 ease-out
-                      focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/50
-                      flex flex-col items-center justify-center
-                      ${
-                        tone === option.value
-                          ? "bg-primary/10 dark:bg-primary/20 border-primary/50 text-primary shadow-md shadow-primary/10"
-                          : "bg-secondary/30 dark:bg-secondary/20 border-border/30 dark:border-border/20 text-foreground/70 hover:bg-secondary/50 dark:hover:bg-secondary/40 hover:border-border/50"
-                      }`}
-                  >
-                    <option.icon className="text-lg mb-1 block" />
-                    <span className="text-xs">{t(option.labelKey)}</span>
-                    {tone === option.value && (
-                      <div className="absolute inset-0 rounded-xl ring-2 ring-primary/30 dark:ring-primary/40 animate-in fade-in-0 zoom-in-95 duration-200" />
-                    )}
-                  </button>
-                ))}
+                {toneOptions.map((option, index) => {
+                  const isLast =
+                    index === toneOptions.length - 1 &&
+                    toneOptions.length % 2 === 1;
+                  // Wrapper helps center the last item on small screens
+                  return (
+                    <div
+                      key={option.value}
+                      className={
+                        isLast
+                          ? "col-span-2 sm:col-span-1 flex justify-center"
+                          : undefined
+                      }
+                    >
+                      <button
+                        type="button"
+                        onClick={() => setTone(option.value)}
+                        className={`group relative p-3 rounded-xl text-sm font-medium w-full 
+                        border transition-all duration-300 ease-out
+                        focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/50
+                        flex flex-col items-center justify-center
+                        ${
+                          tone === option.value
+                            ? "bg-primary/10 dark:bg-primary/20 border-primary/50 text-primary shadow-md shadow-primary/10"
+                            : "bg-secondary/30 dark:bg-secondary/20 border-border/30 dark:border-border/20 text-foreground/70 hover:bg-secondary/50 dark:hover:bg-secondary/40 hover:border-border/50"
+                        }`}
+                      >
+                        <option.icon className="text-lg mb-1 block" />
+                        <span className="text-xs">{t(option.labelKey)}</span>
+                        {tone === option.value && (
+                          <div className="absolute inset-0 rounded-xl ring-2 ring-primary/30 dark:ring-primary/40 animate-in fade-in-0 zoom-in-95 duration-200" />
+                        )}
+                      </button>
+                    </div>
+                  );
+                })}
               </div>
             </div>
 

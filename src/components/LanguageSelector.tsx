@@ -15,8 +15,8 @@ export default function LanguageSelector() {
 
   return (
     <div className="flex items-center gap-1 p-1 rounded-xl bg-secondary/50 dark:bg-secondary/30 border border-border/30 dark:border-border/20 shadow-sm">
-      <div className="p-1.5 text-muted-foreground">
-        <Globe className="h-4 w-4" />
+      <div className="p-1.5 text-muted-foreground hidden sm:block">
+        <Globe className=" h-4 w-4" />
       </div>
       {languages.map((lang) => (
         <button
