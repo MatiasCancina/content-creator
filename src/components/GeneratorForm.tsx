@@ -5,12 +5,14 @@ import useLocalStorage from "@/lib/useLocalStorage";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { generateSchema } from "@/lib/validators";
+import { useLanguage } from "@/lib/LanguageContext";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Card } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import ThemeToggle from "@/components/ThemeToggle";
+import LanguageSelector from "@/components/LanguageSelector";
 import OutputCard from "./OutputCard";
 import HistoryList from "./HistoryList";
 import type { HistoryItem, Tone, FormData } from "@/lib/types";
@@ -29,22 +31,23 @@ import {
 
 const toneOptions: {
   value: Tone;
-  label: string;
+  labelKey: "neutral" | "formal" | "fun" | "technical" | "sales";
   icon: React.ComponentType<{ className?: string }>;
 }[] = [
-  { value: "neutral", label: "Neutral", icon: Scale },
-  { value: "formal", label: "Formal", icon: Briefcase },
-  { value: "divertido", label: "Divertido", icon: PartyPopper },
-  { value: "tecnico", label: "Técnico", icon: Wrench },
-  { value: "ventas", label: "Ventas", icon: DollarSign },
+  { value: "neutral", labelKey: "neutral", icon: Scale },
+  { value: "formal", labelKey: "formal", icon: Briefcase },
+  { value: "divertido", labelKey: "fun", icon: PartyPopper },
+  { value: "tecnico", labelKey: "technical", icon: Wrench },
+  { value: "ventas", labelKey: "sales", icon: DollarSign },
 ];
 
 export default function GeneratorForm() {
+  const { t, locale } = useLanguage();
   const [history, setHistory] = useState<HistoryItem[]>([]);
   const [tone, setTone] = useState<Tone>("neutral");
   const [result, setResult] = useLocalStorage<string | null>(
     "lastOutput",
-    null
+    null,
   );
   const [loading, setLoading] = useState(false);
 
@@ -80,6 +83,7 @@ export default function GeneratorForm() {
       body: JSON.stringify({
         ...data,
         tone,
+        locale,
       }),
     });
     const json = await res.json();
@@ -106,17 +110,6 @@ export default function GeneratorForm() {
   };
 
   const handleDeleteHistoryItem = (id: string) => {
-    if (history.length === 1) {
-      alert("Debe existir al menos un elemento en el historial");
-      return;
-    }
-
-    const confirmed = window.confirm(
-      "¿Estás seguro de que querés eliminar este contenido del historial?"
-    );
-
-    if (!confirmed) return;
-
     const itemToDelete = history.find((item) => item.id === id);
 
     const updatedHistory = history.filter((item) => item.id !== id);
@@ -149,21 +142,26 @@ export default function GeneratorForm() {
 
         <div className="relative z-10 p-6 md:p-8">
           {/* Header */}
-          <div className="flex items-center justify-between mb-8">
-            <div className="flex items-center gap-3">
-              <div className="p-3 rounded-2xl bg-linear-to-br from-primary/20 to-accent/20 dark:from-primary/30 dark:to-accent/30 shadow-lg shadow-primary/10">
-                <Sparkles className="h-6 w-6 text-primary" />
+          <div className="flex flex-col gap-4 mb-8">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className="p-3 rounded-2xl bg-linear-to-br from-primary/20 to-accent/20 dark:from-primary/30 dark:to-accent/30 shadow-lg shadow-primary/10">
+                  <Sparkles className="h-6 w-6 text-primary" />
+                </div>
+                <div>
+                  <h1 className="text-xl md:text-2xl font-bold text-foreground tracking-tight">
+                    {t("title")}
+                  </h1>
+                  <p className="text-sm text-muted-foreground">
+                    {t("subtitle")}
+                  </p>
+                </div>
               </div>
-              <div>
-                <h1 className="text-xl md:text-2xl font-bold text-foreground tracking-tight">
-                  Content AI Generator
-                </h1>
-                <p className="text-sm text-muted-foreground">
-                  Genera contenido profesional para tus productos
-                </p>
+              <div className="flex items-center gap-2">
+                <LanguageSelector />
+                <ThemeToggle />
               </div>
             </div>
-            <ThemeToggle />
           </div>
 
           {/* Form */}
@@ -175,11 +173,11 @@ export default function GeneratorForm() {
                 className="flex items-center gap-2 text-sm font-medium text-foreground/80 dark:text-foreground/70"
               >
                 <Package className="h-4 w-4 text-primary" />
-                Nombre del producto
+                {t("productName")}
               </Label>
               <Input
                 id="name"
-                placeholder="PlayStation 5, iPhone 15 Pro, etc."
+                placeholder={t("productPlaceholder")}
                 {...register("name")}
                 className="h-12
                   bg-secondary/30 dark:bg-secondary/20
@@ -204,11 +202,11 @@ export default function GeneratorForm() {
                 className="flex items-center gap-2 text-sm font-medium text-foreground/80 dark:text-foreground/70"
               >
                 <FileText className="h-4 w-4 text-primary" />
-                Descripción
+                {t("description")}
               </Label>
               <Textarea
                 id="description"
-                placeholder="Describe tu producto: características principales, estado, qué incluye..."
+                placeholder={t("descriptionPlaceholder")}
                 {...register("description")}
                 className="min-h-28 resize-none
                   bg-secondary/30 dark:bg-secondary/20
@@ -230,7 +228,7 @@ export default function GeneratorForm() {
             <div className="space-y-3">
               <Label className="flex items-center gap-2 text-sm font-medium text-foreground/80 dark:text-foreground/70">
                 <Palette className="h-4 w-4 text-primary" />
-                Tono del contenido
+                {t("contentTone")}
               </Label>
               <div className="grid grid-cols-2 sm:grid-cols-5 gap-2">
                 {toneOptions.map((option) => (
@@ -249,7 +247,7 @@ export default function GeneratorForm() {
                       }`}
                   >
                     <option.icon className="text-lg mb-1 block" />
-                    <span className="text-xs">{option.label}</span>
+                    <span className="text-xs">{t(option.labelKey)}</span>
                     {tone === option.value && (
                       <div className="absolute inset-0 rounded-xl ring-2 ring-primary/30 dark:ring-primary/40 animate-in fade-in-0 zoom-in-95 duration-200" />
                     )}
@@ -276,12 +274,12 @@ export default function GeneratorForm() {
               {loading ? (
                 <span className="flex items-center gap-2">
                   <div className="h-5 w-5 rounded-full border-2 border-primary-foreground/30 border-t-primary-foreground animate-spin" />
-                  Generando contenido...
+                  {t("generating")}
                 </span>
               ) : (
                 <span className="flex items-center gap-2">
                   <Wand2 className="h-5 w-5" />
-                  Generar contenido
+                  {t("generate")}
                 </span>
               )}
             </Button>

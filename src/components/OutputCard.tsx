@@ -4,8 +4,10 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { ClipboardCopy, Check, Sparkles } from "lucide-react";
+import { useLanguage } from "@/lib/LanguageContext";
 
 export default function OutputCard({ text }: { text: string }) {
+  const { t } = useLanguage();
   const [copied, setCopied] = useState(false);
 
   const copyText = () => {
@@ -27,7 +29,7 @@ export default function OutputCard({ text }: { text: string }) {
     >
       {/* Gradient accent line */}
       <div className="absolute top-0 left-0 right-0 h-1 bg-linear-to-r from-primary via-accent to-primary" />
-      
+
       {/* Subtle background pattern */}
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(var(--primary),0.03),transparent_50%)] dark:bg-[radial-gradient(circle_at_50%_0%,rgba(var(--primary),0.08),transparent_50%)]" />
 
@@ -39,10 +41,10 @@ export default function OutputCard({ text }: { text: string }) {
               <Sparkles className="h-4 w-4 text-primary" />
             </div>
             <span className="text-sm font-semibold text-foreground/80 dark:text-foreground/70">
-              Contenido Generado
+              {t("generatedContent")}
             </span>
           </div>
-          
+
           <Button
             variant="outline"
             size="sm"
@@ -57,12 +59,12 @@ export default function OutputCard({ text }: { text: string }) {
               {copied ? (
                 <>
                   <Check className="h-4 w-4 text-accent" />
-                  <span className="text-accent font-medium">Copiado</span>
+                  <span className="text-accent font-medium">{t("copied")}</span>
                 </>
               ) : (
                 <>
                   <ClipboardCopy className="h-4 w-4 transition-transform group-hover:scale-110" />
-                  <span>Copiar</span>
+                  <span>{t("copy")}</span>
                 </>
               )}
             </span>

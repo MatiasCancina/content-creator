@@ -1,10 +1,10 @@
 import React from "react";
 import type { Metadata } from "next";
 import { Analytics } from "@vercel/analytics/next";
-import { ThemeProvider } from "next-themes";
 import "./globals.css";
 
 import { Geist, Geist_Mono } from "next/font/google";
+import { Providers } from "./providers";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -56,15 +56,10 @@ export default function RootLayout({
           bg-background text-foreground
           min-h-screen"
       >
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
+        <Providers>
           {children}
-        </ThemeProvider>
-        <Analytics />
+          <Analytics />
+        </Providers>
       </body>
     </html>
   );
