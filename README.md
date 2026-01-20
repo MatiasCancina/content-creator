@@ -1,36 +1,120 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🤖 AI Content Generator
 
-## Getting Started
+AI Content Generator is a web application that allows users to generate optimized product content using Large Language Models (LLMs). It supports multiple tones, keeps a persistent generation history, and provides a modern, user-friendly interface with dark mode support.
 
-First, run the development server:
+This project was built following best practices in modern frontend development with **Next.js, TypeScript, and Tailwind CSS**.
+
+---
+
+## ✨ Features
+
+* 🔮 **AI-powered content generation** using LLMs (Groq / LLaMA)
+* 🎭 **Tone customization**: neutral, formal, playful, technical, sales-oriented
+* 🕓 **Generation history** with persistence (localStorage)
+* 🗑️ **Delete history items** with confirmation
+* 📋 **Copy generated content** for easy reuse
+* 🌙 **Dark mode** with system preference support
+* ✅ **Form validation** with React Hook Form + Zod
+* ⚡ **Fast and responsive UI** with Tailwind CSS
+
+---
+
+## 🧠 Tech Stack
+
+* **Framework:** Next.js (App Router)
+* **Language:** TypeScript
+* **Styling:** Tailwind CSS
+* **Forms & Validation:** React Hook Form, Zod
+* **AI Integration:** Groq API (LLaMA models)
+* **State & Persistence:** React Hooks, localStorage
+* **Theming:** next-themes (Dark / Light / System)
+
+---
+
+## 🚀 Getting Started
+
+### 1. Clone the repository
+
+```bash
+git clone https://github.com/MatiasCancina/content-creator.git
+cd content-generator
+```
+
+### 2. Install dependencies
+
+```bash
+npm install
+```
+
+### 3. Environment variables
+
+Create a `.env.local` file in the root of the project:
+
+```env
+NEXT_PUBLIC_GROQ_API_KEY=your_api_key_here
+```
+
+> ⚠️ Make sure not to commit your API key.
+
+### 4. Run the development server
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 🧪 Usage
 
-## Learn More
+1. Enter a product name and description
+2. Select the desired tone
+3. Generate AI-powered content
+4. View, copy, or reuse previous generations from the history
+5. Toggle dark mode for a better visual experience
 
-To learn more about Next.js, take a look at the following resources:
+All generated content and history are persisted locally.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+---
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## 🧩 Project Structure
 
-## Deploy on Vercel
+```
+src/
+├── app/                # Next.js App Router
+├── components/         # UI components (GeneratorForm, HistoryList, etc.)
+├── lib/                # Utilities, hooks, validators
+├── styles/             # Global styles
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+---
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 💡 Design Decisions
+
+* **Separation of concerns:** business logic handled in container components
+* **Reusable UI components:** presentational components are stateless
+* **Client-side persistence:** localStorage used for fast UX
+* **Scalable validation:** shared schemas between frontend and API
+
+---
+
+## 📌 Future Improvements
+
+* Export generated content to Markdown / PDF
+* Backend persistence with authentication
+* Presets and templates per tone
+* Automated tests (Playwright / Vitest)
+
+---
+
+## 👤 Author
+
+**Matías**
+Frontend Developer (React / Next.js / TypeScript)
+
+---
+
+## 📄 License
+
+This project is for educational and portfolio purposes.
