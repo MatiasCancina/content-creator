@@ -1,10 +1,10 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import useLocalStorage from "@/lib/useLocalStorage";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { generateSchema } from "@/lib/validators";
+import { getGenerateSchema } from "@/lib/validators";
 import { useLanguage } from "@/lib/LanguageContext";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -43,6 +43,7 @@ const toneOptions: {
 
 export default function GeneratorForm() {
   const { t, locale } = useLanguage();
+  const schema = useMemo(() => getGenerateSchema(locale), [locale]);
   const [history, setHistory] = useState<HistoryItem[]>([]);
   const [tone, setTone] = useState<Tone>("neutral");
   const [result, setResult] = useLocalStorage<string | null>(
@@ -61,9 +62,14 @@ export default function GeneratorForm() {
     register,
     handleSubmit,
     formState: { errors },
+    trigger,
   } = useForm<FormData>({
-    resolver: zodResolver(generateSchema),
+    resolver: zodResolver(schema),
   });
+
+  useEffect(() => {
+    trigger();
+  }, [locale, trigger]);
 
   useEffect(() => {
     try {

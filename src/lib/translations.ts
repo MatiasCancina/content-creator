@@ -8,7 +8,7 @@ export const translations = {
 
         // Form labels
         productName: "Nombre del producto",
-        productPlaceholder: "PlayStation 5, iPhone 15 Pro, etc.",
+        productPlaceholder: "PlayStation 5, iPhone 17 Pro, etc.",
         description: "Descripcion",
         descriptionPlaceholder:
             "Describe tu producto: caracteristicas principales, estado, que incluye...",
@@ -53,7 +53,7 @@ export const translations = {
 
         // Form labels
         productName: "Product name",
-        productPlaceholder: "PlayStation 5, iPhone 15 Pro, etc.",
+        productPlaceholder: "PlayStation 5, iPhone 17 Pro, etc.",
         description: "Description",
         descriptionPlaceholder:
             "Describe your product: main features, condition, what's included...",
